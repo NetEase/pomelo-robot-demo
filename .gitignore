@@ -1,0 +1,7 @@
+.project
+*/node-log.log
+.project
+.settings/
+**/*.svn
+*.svn
+*.swp
