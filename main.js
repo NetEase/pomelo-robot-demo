@@ -1,6 +1,6 @@
 var queryHero = require('./app/data/mysql').queryHero;
 var config = require('./app/config/config');
-var Robot = require('robot').Robot;
+var Robot = require('pomelo-robot').Robot;
 var fs = require('fs');
 
 var robot = new Robot(config);
