@@ -3,7 +3,7 @@
   {
   "master":{"host": "127.0.0.1","port":8888,"webport":8889},
   "apps":[{"host":"127.0.0.1","port":3050}],
-  "mysql":{"host":"127.0.0.1","user":"xy","password":"dev","database":"Pomelo"},
+  "mysql":{"host":"pomelo.163.com","user":"xy","password":"dev","database":"Pomelo"},
   "clients":["127.0.0.1"]
   },
   "prod":

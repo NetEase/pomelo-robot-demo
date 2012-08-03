@@ -37,7 +37,7 @@ robot.on('area.treasureHandler.pickItem',function(result){
 robot.on('connector.loginHandler.login', function(data){
 	  var user = data.user;
 	  var player = data.player;
-    //console.log('  onLogin userData:  '+JSON.stringify(data));
+    console.log('  onLogin userData:  '+JSON.stringify(data));
     if (player.id <= 0) { 
         console.log("用户不存在\n uid:" + uid + " code:" + data.code);
     }else{
@@ -103,12 +103,12 @@ var SlimPlay = function(id,entityId,name,type,level){
  * 处理用户加入请求
  */
 robot.on('onPlayerAdd',function(data){
-    //console.log("新用户加入: " + JSON.stringify(data));
+    console.log("新用户加入: " + JSON.stringify(data));
     if (data.player.id===pomelo.player.id) {
         pomelo.player.entityId = data.player.entityId;
-        pomelo.bags = data.player.bag.items;
-        pomelo.equipments = data.player.equipments;
-        pomelo.skills = data.player.fightSkills;
+        //pomelo.bags = data.player.bag.items;
+        //pomelo.equipments = data.player.equipments;
+        //pomelo.skills = data.player.fightSkills;
     }
     var player = data.player;
     var slim = new SlimPlay(player.id,player.entityId,player.name,player.level);
