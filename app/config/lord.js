@@ -155,7 +155,7 @@ robot.on('onUpgrade' , function(data){
     if (data.player.id===pomelo.player.id)
     {   msgTempate.content = 'NB的我升'+data.player.level+'级了，羡慕我吧';
 	      pomelo.level = data.player.level;    
-        robot.request(msgTempate);
+        //robot.request(msgTempate);
     }
 });
 
@@ -260,7 +260,7 @@ var move = function(){
         if (nearstId<=0) {return;}
         if (nearEntity.type==='mob') {
             msgTempate.content = '老子要去杀怪了';
-		        robot.request(msgTempate);
+		        //robot.request(msgTempate);
         }
         console.error('attack target %j,self %j,selfuid %j',nearstId,pomelo.entityId,pomelo.uid);
         pomelo.lastAttAckId = nearstId;
@@ -305,7 +305,7 @@ robot.on('onPickItem', function(data){
     //console.log('pic %j',data);
     if (!!item && data.player===pomelo.player.entityId) {
         msgTempate.content = '捡到一个XXOO的'+ item.kindName+'玩意';
-        robot.request(msgTempate);
+        //robot.request(msgTempate);
     }
     delete item;
 });
