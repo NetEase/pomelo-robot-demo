@@ -9,26 +9,16 @@ pomelo.equipments = [];
 pomelo.areas = [];
 pomelo.skills = [];
 
+
 var msgTempate = {route:'chat.chatHandler.send',scope:'D41313',content:'老子要杀怪了'};
 
 var login = function(){
     //console.log('%j',Iuser);
 	  var data = {route:'connector.loginHandler.login', username:Iuser.username, password:Iuser.passwd};
-	  robot.pushMessage(data);
+	  robot.request(data);
 };
 
 login();
-
-/**
- * 捡宝物回调
- * @param {Object} data
- */
-robot.on('area.treasureHandler.pickItem',function(result){
-    if(result.success){
-	      delete _treasures[treasureId];
-        //console.log('success picked up treasure ' + treasureId);
-    }
-});
 
 
 /**
@@ -43,7 +33,8 @@ robot.on('connector.loginHandler.login', function(data){
     }else{
         pomelo.uid = user.id;
         pomelo.player = player;
-        robot.pushMessage({route:"area.playerHandler.enterScene", uid:pomelo.uid, playerId: pomelo.player.id, areaId: pomelo.player.areaId});
+        var msg = {route:"area.playerHandler.enterScene", uid:pomelo.uid, playerId: pomelo.player.id, areaId: pomelo.player.areaId};
+        robot.request(msg);
         msgTempate.uid = pomelo.uid;
         msgTempate.playerId = pomelo.player.id;
         msgTempate.from = pomelo.player.name,
@@ -164,7 +155,8 @@ robot.on('onUpgrade' , function(data){
     if (data.player.id===pomelo.player.id)
     {   msgTempate.content = 'NB的我升'+data.player.level+'级了，羡慕我吧';
 	      pomelo.level = data.player.level;    
-        robot.pushMessage(msgTempate);}
+        robot.request(msgTempate);
+    }
 });
 
 
@@ -268,7 +260,7 @@ var move = function(){
         if (nearstId<=0) {return;}
         if (nearEntity.type==='mob') {
             msgTempate.content = '老子要去杀怪了';
-		        robot.pushMessage(msgTempate);
+		        robot.request(msgTempate);
         }
         console.error('attack target %j,self %j,selfuid %j',nearstId,pomelo.entityId,pomelo.uid);
         pomelo.lastAttAckId = nearstId;
@@ -290,16 +282,16 @@ attack = function(entity) {
         var route = 'area.fightHandler.attack';
         var areaId = pomelo.player.areaId;
         var msg = {route:route,areaId:areaId,playerId: pomelo.player.id, targetId:attackId, skillId: skillId};
-        robot.pushMessage(msg);
+        robot.request(msg);
         console.log(' begin attack == %j , %j ',entity.type,msg); 
 		} else if (entity.type === 'npc') {
-				//pomelo.pushMessage({route:'area.playerHandler.npcTalk', areaId :areaId, playerId: playerId, targetId: targetId});
-		} else if (entity.type === 'item' || entity.type === 'equipment') {
+        //
+    } else if (entity.type === 'item' || entity.type === 'equipment') {
         var route = 'area.playerHandler.pickItem';
         var attackId = entity.entityId;
         var msg = {route:route, areaId:pomelo.player.areaId, playerId:pomelo.player.id, targetId:attackId};
         //console.log(' begin pickup == %j , %j ',entity.type,msg); 
-        robot.pushMessage(msg);
+        robot.request(msg);
 		}
 }
 
@@ -313,7 +305,7 @@ robot.on('onPickItem', function(data){
     //console.log('pic %j',data);
     if (!!item && data.player===pomelo.player.entityId) {
         msgTempate.content = '捡到一个XXOO的'+ item.kindName+'玩意';
-        robot.pushMessage(msgTempate);
+        robot.request(msgTempate);
     }
     delete item;
 });
