@@ -27,7 +27,7 @@ login();
 robot.on('connector.loginHandler.login', function(data){
 	  var user = data.user;
 	  var player = data.player;
-    console.log('  onLogin userData:  '+JSON.stringify(data));
+    //console.log('  onLogin userData:  '+JSON.stringify(data));
     if (player.id <= 0) { 
         console.log("用户不存在\n uid:" + uid + " code:" + data.code);
     }else{
@@ -94,7 +94,7 @@ var SlimPlay = function(id,entityId,name,type,level){
  * 处理用户加入请求
  */
 robot.on('onPlayerAdd',function(data){
-    console.log("新用户加入: " + JSON.stringify(data));
+    //console.log("新用户加入: " + JSON.stringify(data));
     if (data.player.id===pomelo.player.id) {
         pomelo.player.entityId = data.player.entityId;
         //pomelo.bags = data.player.bag.items;
@@ -155,7 +155,7 @@ robot.on('onUpgrade' , function(data){
     if (data.player.id===pomelo.player.id)
     {   msgTempate.content = 'NB的我升'+data.player.level+'级了，羡慕我吧';
 	      pomelo.level = data.player.level;    
-        //robot.request(msgTempate);
+        robot.request(msgTempate);
     }
 });
 
@@ -260,7 +260,7 @@ var move = function(){
         if (nearstId<=0) {return;}
         if (nearEntity.type==='mob') {
             msgTempate.content = '老子要去杀怪了';
-		        //robot.request(msgTempate);
+		        robot.request(msgTempate);
         }
         console.error('attack target %j,self %j,selfuid %j',nearstId,pomelo.entityId,pomelo.uid);
         pomelo.lastAttAckId = nearstId;
@@ -305,7 +305,7 @@ robot.on('onPickItem', function(data){
     //console.log('pic %j',data);
     if (!!item && data.player===pomelo.player.entityId) {
         msgTempate.content = '捡到一个XXOO的'+ item.kindName+'玩意';
-        //robot.request(msgTempate);
+        robot.request(msgTempate);
     }
     delete item;
 });
