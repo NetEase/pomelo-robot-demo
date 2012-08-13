@@ -39,7 +39,7 @@ robot.on('connector.loginHandler.login', function(data){
         msgTempate.playerId = pomelo.player.id;
         msgTempate.from = pomelo.player.name,
         msgTempate.areaId = pomelo.player.areaId;
-        robot.interval(move,1000+Math.round(Math.random()*3000));
+        robot.interval(move,2000+Math.round(Math.random()*3000));
     }
 });
 
