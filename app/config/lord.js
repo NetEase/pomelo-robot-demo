@@ -39,9 +39,16 @@ robot.on('connector.loginHandler.login', function(data){
         msgTempate.playerId = pomelo.player.id;
         msgTempate.from = pomelo.player.name,
         msgTempate.areaId = pomelo.player.areaId;
-        robot.interval(move,2000+Math.round(Math.random()*3000));
+        robot.interval(sendChat,2000+Math.round(Math.random()*3000));
     }
 });
+
+
+var sendChat = function() {
+  msgTempate.content = '捡到一个XXOO的玩意';
+  robot.request(msgTempate);
+
+}
 
 
 robot.on('area.playerHandler.enterScene', function(data){
@@ -262,7 +269,7 @@ var move = function(){
             msgTempate.content = '老子要去杀怪了';
 		        robot.request(msgTempate);
         }
-        console.error('attack target %j,self %j,selfuid %j',nearstId,pomelo.entityId,pomelo.uid);
+        //console.error('attack target %j,self %j,selfuid %j',nearstId,pomelo.entityId,pomelo.uid);
         pomelo.lastAttAckId = nearstId;
         //console.log(' first fight ' + nearEntity.type +  ' random ' + randomNum + ' size ' + size);
         attack(nearEntity);
@@ -283,7 +290,7 @@ attack = function(entity) {
         var areaId = pomelo.player.areaId;
         var msg = {route:route,areaId:areaId,playerId: pomelo.player.id, targetId:attackId, skillId: skillId};
         robot.request(msg);
-        console.log(' begin attack == %j , %j ',entity.type,msg); 
+        //console.log(' begin attack == %j , %j ',entity.type,msg); 
 		} else if (entity.type === 'npc') {
         //
     } else if (entity.type === 'item' || entity.type === 'equipment') {
