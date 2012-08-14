@@ -79,7 +79,7 @@ robot.on('area.userHandler.getOnlinePlayers',function(data){
  * 处理用户离开请求
  */
 robot.on('onUserLeave',function(data){
-    console.log("用户离开: " + JSON.stringify(data));
+    //console.log("用户离开: " + JSON.stringify(data));
     var player = pomelo.players[data.playerId];
     if (!!player) {
       //console.log(' user leave %j ',player);
@@ -153,7 +153,7 @@ robot.on('onRevive', function(data){
     if (data.entityId === pomelo.player.entityId) {
         pomelo.isDead = false;
         pomelo.attackId = 0;
-        console.log(' ON revive %j',pomelo.player.id + ' ' + pomelo.uid);
+        //console.log(' ON revive %j',pomelo.player.id + ' ' + pomelo.uid);
     }
 });
 
@@ -227,7 +227,7 @@ var getEntityLength =function (entities) {
 
 var move = function(){
     //console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.player.entityId);
-    console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.player.entityId + ' ' + pomelo.attackId);
+    //console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.player.entityId + ' ' + pomelo.attackId);
     if (!pomelo.player.entityId || !!pomelo.isDead ) {
         return;
     }
@@ -243,7 +243,7 @@ var move = function(){
         var size =  getEntityLength(pomelo.entities); 
         var randomNum = Math.floor(Math.random()*size);
         var count = 0;
-        console.log(' first fight ' + pomelo.uid +  ' random ' + randomNum + ' size ' + size);
+        //console.log(' first fight ' + pomelo.uid +  ' random ' + randomNum + ' size ' + size);
         for (var id in pomelo.entities){
             var entity = pomelo.entities[id];
             if (entity.type==='npc' || entity.type==='player') continue;
