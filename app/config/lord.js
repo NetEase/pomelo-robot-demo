@@ -269,9 +269,9 @@ var move = function(){
             //}
 	      }
         if (nearstId<=0) {return;}
-        if (nearEntity.type==='mob') { msgTempate.content = '去杀怪了'; robot.request(msgTempate); }
         pomelo.lastAttAckId = nearstId;
         console.log(' first fight uid=%j type=%j attackId=%j' ,pomelo.uid ,nearEntity.type,nearstId);
+        //if (nearEntity.type==='mob') { msgTempate.content = '去杀怪了'; robot.request(msgTempate); }
         attack(nearEntity);
     }
 };
