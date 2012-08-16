@@ -33,15 +33,25 @@ robot.on('connector.loginHandler.login', function(data){
     }else{
         pomelo.uid = user.id;
         pomelo.player = player;
+        
         var msg = {route:"area.playerHandler.enterScene", uid:pomelo.uid, playerId: pomelo.player.id, areaId: pomelo.player.areaId};
-        robot.request(msg);
+        robot.request(msg,enterScene);
         msgTempate.uid = pomelo.uid;
         msgTempate.playerId = pomelo.player.id;
         msgTempate.from = pomelo.player.name,
         msgTempate.areaId = pomelo.player.areaId;
-        robot.interval(move,2000+Math.round(Math.random()*3000));
+        robot.interval(move,1000+Math.round(Math.random()*3000));
     }
 });
+
+
+var enterScene = function(data) {
+    //dataApi.init(data.data);
+    var area = data.data.area;
+    pomelo.areas[area.id] = area;
+    pomelo.entities = data.data.area.entities;
+    pomelo.player = data.data.curPlayer;
+}
 
 
 var sendChat = function() {
@@ -49,17 +59,6 @@ var sendChat = function() {
   robot.request(msgTempate);
 
 }
-
-
-robot.on('area.playerHandler.enterScene', function(data){
-    //console.log('enter %j',data.data); 
-    //dataApi.init(data.data);
-    var area = data.data.area;
-    pomelo.areas[area.id] = area;
-    pomelo.entities = data.data.area.entities;
-    //console.log('%j',pomelo.entities);
-    //app.init(data.data);
-});
 
 /**
  * 处理在线用户请求
@@ -225,8 +224,9 @@ var getEntityLength =function (entities) {
     return count;
 };
 
+var fightedMap = {};
+
 var move = function(){
-    //console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.player.entityId);
     //console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.player.entityId + ' ' + pomelo.attackId);
     if (!pomelo.player.entityId || !!pomelo.isDead ) {
         return;
@@ -234,16 +234,20 @@ var move = function(){
     if (pomelo.attackId>0) {
         var entity = pomelo.entities[pomelo.attackId];
         if (!!entity) {
-            //console.log(' second fight ' + entity.type);
             attack(entity);
+            var count = fightedMap[pomelo.attackId] ||1;
+            fightedMap[pomelo.attackId] = (count+1);
+            if (count>=10) {
+              delete fightedMap[pomelo.attackId];
+              delete entity;
+              clearAttack(pomelo.attackId);
+            }
+        } else {
+            clearAttack(pomelo.attackId);
         }
     } else {
-        var nearstId = 0;
-        var nearEntity = null;
-        var size =  getEntityLength(pomelo.entities); 
+        var nearstId = 0,nearEntity = null,count=0,size =  getEntityLength(pomelo.entities); 
         var randomNum = Math.floor(Math.random()*size);
-        var count = 0;
-        //console.log(' first fight ' + pomelo.uid +  ' random ' + randomNum + ' size ' + size);
         for (var id in pomelo.entities){
             var entity = pomelo.entities[id];
             if (entity.type==='npc' || entity.type==='player') continue;
@@ -265,13 +269,9 @@ var move = function(){
             //}
 	      }
         if (nearstId<=0) {return;}
-        if (nearEntity.type==='mob') {
-            msgTempate.content = '老子要去杀怪了';
-		        //robot.request(msgTempate);
-        }
-        //console.error('attack target %j,self %j,selfuid %j',nearstId,pomelo.entityId,pomelo.uid);
+        if (nearEntity.type==='mob') { msgTempate.content = '去杀怪了'; robot.request(msgTempate); }
         pomelo.lastAttAckId = nearstId;
-        //console.log(' first fight ' + nearEntity.type +  ' random ' + randomNum + ' size ' + size);
+        console.log(' first fight uid=%j type=%j attackId=%j' ,pomelo.uid ,nearEntity.type,nearstId);
         attack(nearEntity);
     }
 };
@@ -280,7 +280,6 @@ pomelo.lastAttAckId = 0;
 
 attack = function(entity) {
     //console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.playerId + ' ' + entity.entityId + ' ' + entity.type);
-    robot.later(function(){if (pomelo.lastAttAckId===pomelo.attackId){console.log(' clean long time attack %j',pomelo.uid),pomelo.attackId=0;}},1000 * 10);
     if (entity.type === 'player' || entity.type === 'mob') {
 				if (entity.died) {return;}
         var attackId = entity.entityId;
