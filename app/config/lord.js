@@ -1,4 +1,5 @@
 var pomelo = {};
+
 pomelo.player = null;
 pomelo.players = {};
 pomelo.entities = {};
@@ -33,14 +34,13 @@ robot.on('connector.loginHandler.login', function(data){
     }else{
         pomelo.uid = user.id;
         pomelo.player = player;
-        
         var msg = {route:"area.playerHandler.enterScene", uid:pomelo.uid, playerId: pomelo.player.id, areaId: pomelo.player.areaId};
         robot.request(msg,enterScene);
         msgTempate.uid = pomelo.uid;
         msgTempate.playerId = pomelo.player.id;
         msgTempate.from = pomelo.player.name,
         msgTempate.areaId = pomelo.player.areaId;
-        robot.interval(move,1000+Math.round(Math.random()*3000));
+        robot.interval(move,2000+Math.round(Math.random()*3000));
     }
 });
 
