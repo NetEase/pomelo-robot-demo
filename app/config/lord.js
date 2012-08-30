@@ -39,7 +39,7 @@ robot.on('connector.loginHandler.login', function(data){
     msgTempate.playerId = pomelo.player.id;
     msgTempate.from = pomelo.player.name,
     msgTempate.areaId = pomelo.player.areaId;
-    var moveRandom = 1+Math.floor(Math.random()*2);
+    var moveRandom = Math.floor(Math.random()*3+1);
     if (moveRandom<=2) {
       robot.interval(moveEvent,2000+Math.round(Math.random()*3000));
       console.log('moveer===============' + pomelo.player.name);
