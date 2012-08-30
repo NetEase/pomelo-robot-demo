@@ -42,10 +42,10 @@ robot.on('connector.loginHandler.login', function(data){
     var moveRandom = Math.floor(Math.random()*3+1);
     if (moveRandom<=2) {
       robot.interval(moveEvent,2000+Math.round(Math.random()*3000));
-      console.log('moveer===============' + pomelo.player.name);
+      console.log(' mover:' + pomelo.player.name);
     } else { 
       robot.interval(attackEvent,2000+Math.round(Math.random()*3000));
-      console.log('fighter===============' + pomelo.player.name);
+      console.log('fighter:' + pomelo.player.name);
     }
     }
 });
@@ -305,7 +305,7 @@ var moveEvent = function() {
 var fightedMap = {};
 
 var attackEvent = function(){
-  console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.player.entityId + ' ' + pomelo.attackId);
+  //console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.player.entityId + ' ' + pomelo.attackId);
   if (!pomelo.player.entityId || !!pomelo.isDead ) {
     return;
   }
