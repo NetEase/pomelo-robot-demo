@@ -16,15 +16,14 @@ var msgTempate = {route:'chat.chatHandler.send',scope:'D41313',content:'老子�
 var login = function(){
   //console.log('%j',Iuser);
   var data = {route:'connector.loginHandler.login', username:Iuser.username, password:Iuser.passwd};
-  robot.request(data);
+  robot.request(data,loginRes);
 };
-
-login();
 
 /**
  * 处理登录请求
  */
-robot.on('connector.loginHandler.login', function(data){
+var loginRes = function(data){
+		//console.log('longined %j',data);
     var user = data.user;
     var player = data.player;
     //console.log('  onLogin userData:  '+JSON.stringify(data));
@@ -48,8 +47,9 @@ robot.on('connector.loginHandler.login', function(data){
       console.log('fighter:' + pomelo.player.name);
     }
     }
-});
+};
 
+login();
 
 var enterScene = function(data) {
   var area = data.data.area;
