@@ -16,7 +16,7 @@ var msgTempate = {route:'chat.chatHandler.send',scope:'D41313',content:'老子�
 var login = function(){
   //console.log('%j',Iuser);
   var data = {route:'connector.loginHandler.login', username:Iuser.username, password:Iuser.passwd};
-  robot.request(data,loginRes);
+  robot.request(data,loginRes,true);
 };
 
 /**
@@ -33,7 +33,7 @@ var loginRes = function(data){
 			pomelo.uid = user.id;
 			pomelo.player = player;
 			var msg = {route:"area.playerHandler.enterScene", uid:pomelo.uid, playerId: pomelo.player.id, areaId: pomelo.player.areaId};
-			robot.request(msg,enterScene);
+			robot.request(msg,enterScene,false);
 			msgTempate.uid = pomelo.uid;
 			msgTempate.playerId = pomelo.player.id;
 			msgTempate.from = pomelo.player.name,
@@ -297,7 +297,7 @@ var moveEvent = function() {
   if (!!pomelo.isDead) {return;}
 
  var msg = {route: 'area.playerHandler.move', path:getPath()};
-      robot.request(msg,vaildMove);
+      robot.request(msg,vaildMove,true);
 
 
 }
