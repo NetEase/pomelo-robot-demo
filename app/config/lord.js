@@ -24,28 +24,20 @@ var login = function(){
  */
 var loginRes = function(data){
 		//console.log('longined %j',data);
-    var user = data.user;
-    var player = data.player;
+			var user = data.user;
+			var player = data.player;
     //console.log('  onLogin userData:  '+JSON.stringify(data));
     if (player.id <= 0) { 
-    console.log("用户不存在\n uid:" + uid + " code:" + data.code);
-    }else{
-    pomelo.uid = user.id;
-    pomelo.player = player;
-    var msg = {route:"area.playerHandler.enterScene", uid:pomelo.uid, playerId: pomelo.player.id, areaId: pomelo.player.areaId};
-    robot.request(msg,enterScene);
-    msgTempate.uid = pomelo.uid;
-    msgTempate.playerId = pomelo.player.id;
-    msgTempate.from = pomelo.player.name,
-    msgTempate.areaId = pomelo.player.areaId;
-    var moveRandom = Math.floor(Math.random()*3+1);
-    if (moveRandom<=2) {
-      robot.interval(moveEvent,2000+Math.round(Math.random()*3000));
-      console.log(' mover:' + pomelo.player.name);
-    } else { 
-      robot.interval(attackEvent,2000+Math.round(Math.random()*3000));
-      console.log('fighter:' + pomelo.player.name);
-    }
+			console.log("用户不存在\n uid:" + uid + " code:" + data.code);
+    } else {
+			pomelo.uid = user.id;
+			pomelo.player = player;
+			var msg = {route:"area.playerHandler.enterScene", uid:pomelo.uid, playerId: pomelo.player.id, areaId: pomelo.player.areaId};
+			robot.request(msg,enterScene);
+			msgTempate.uid = pomelo.uid;
+			msgTempate.playerId = pomelo.player.id;
+			msgTempate.from = pomelo.player.name,
+			msgTempate.areaId = pomelo.player.areaId;
     }
 };
 
@@ -57,6 +49,14 @@ var enterScene = function(data) {
   pomelo.entities = data.data.area.entities;
   pomelo.player = data.data.curPlayer;
   pomelo.entities[pomelo.player.entityId] = pomelo.player;
+	var moveRandom = Math.floor(Math.random()*3+1);
+  if (moveRandom<=2) {
+      robot.interval(moveEvent,2000+Math.round(Math.random()*3000));
+      console.log(' mover:' + pomelo.player.name);
+  } else { 
+      robot.interval(attackEvent,2000+Math.round(Math.random()*3000));
+      console.log('fighter:' + pomelo.player.name);
+    }
 }
 
 
