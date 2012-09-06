@@ -6,7 +6,7 @@ var fs = require('fs');
 var robot = new Robot(config);
 
 if (robot.server==='master') {
-    robot.run(__filename);
+    robot.runMaster(__filename);
 } else {
     var mysql =config[robot.env].mysql;
     console.error('%j',mysql);
@@ -21,7 +21,7 @@ if (robot.server==='master') {
     var limit = args[i++];
     var offset= args[i++];
     var script = fs.readFileSync(process.cwd() + '/app/config/lord.js', 'utf8');
-    queryHero(client,limit,offset,function(error,users){robot.run(users,script);});
+    queryHero(client,limit,offset,function(error,users){robot.runAgent(users,script);});
 }
 
 //process.on('uncaughtException', function(err) {
