@@ -26,7 +26,6 @@ var loginRes = function(data){
 		//console.log('longined %j',data);
 			var user = data.user;
 			var player = data.player;
-    //console.log('  onLogin userData:  '+JSON.stringify(data));
     if (player.id <= 0) { 
 			console.log("用户不存在\n uid:" + uid + " code:" + data.code);
     } else {
@@ -179,14 +178,7 @@ robot.on('onAddMob', function(data){
     data = null;
 });
 
-/**
- * 处理用户移动请求
- */
-robot.on('area.userHandler.move',function(data){
-    if (_uid==data.body.uid){
-    this.done();
-    }
-});
+
 
 robot.on('onMove',function(data){
     var entity = pomelo.entities[data.entityId];
@@ -212,16 +204,20 @@ var getEntityLength =function (entities) {
 
 var moveDirection = 1+Math.floor(Math.random()*7);
 
-var vaildMove = function(data){
-  if (data.code !=200) {
+
+/**
+ * 处理用户移动请求
+ */
+robot.on('area.playerHandler.move',function(data){
+	if (data.code !=200) {
     moveDirection++;
     //console.error('rong way ' + moveDirection +  ' ' + pomelo.player.name);
     return;
   }
   
-  if (moveDirection>=8){ moveDirection = 1;}
+  if (moveDirection>=8){ moveDirection = 1+Math.floor(Math.random()*5);}
 
-};
+});
 
 var FIX_SPACE = 120;
 
@@ -277,14 +273,6 @@ var getFirstFight = function() {
       break;
     } 
     count++;
-    //var ex = entity.x;
-    //var ey = entity.y;
-    //var distance = (pomelo.player.x -ex) * (pomelo.player.x -ex) + (pomelo.player.y - ey) *  (pomelo.player.y - ey);
-    //if (distance<max){
-    //    max = distance; 
-    //    nearstId = id;
-    //    nearEntity = entity;
-    //}
   }
   if (nearstId<=0) {return;}
   pomelo.lastAttAckId = nearstId;
@@ -297,7 +285,7 @@ var moveEvent = function() {
   if (!!pomelo.isDead) {return;}
 
  var msg = {route: 'area.playerHandler.move', path:getPath()};
-      robot.request(msg,vaildMove,true);
+      robot.request(msg);
 
 
 }
