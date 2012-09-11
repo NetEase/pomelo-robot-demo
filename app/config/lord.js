@@ -187,6 +187,7 @@ robot.on('onMove',function(data){
       var path = data.path[1];
       pomelo.player.x = path.x;
       pomelo.player.y = path.y;
+			console.log(' %j move to x=%j,y=%j',pomelo.uid,path.x,path.y);
     }
     pomelo.entities[data.entityId] = entity;    
 });
