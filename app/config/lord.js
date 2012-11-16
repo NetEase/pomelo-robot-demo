@@ -10,12 +10,14 @@ pomelo.equipments = [];
 pomelo.areas = [];
 pomelo.skills = [];
 
+//set debug level
+
+robot.logLevel(1);
 
 var msgTempate = {route:'chat.chatHandler.send',scope:'D41313',content:'老子要杀怪了'};
 
 var login = function(){
-  //console.log('%j',Iuser);
-  var data = {route:'connector.loginHandler.login', username:Iuser.username, password:Iuser.passwd};
+  var data = {route:'connector.entryHandler.rlogin', id:Iuser.uid};
   robot.request(data,loginRes,true);
 };
 
@@ -23,19 +25,17 @@ var login = function(){
  * 处理登录请求
  */
 var loginRes = function(data){
-		//console.log('longined %j',data);
-			var user = data.user;
-			var player = data.player;
+		var player = data.player;
     if (player.id <= 0) { 
 			console.log("用户不存在\n uid:" + uid + " code:" + data.code);
     } else {
-			pomelo.uid = user.id;
+			pomelo.uid = player.userId;
 			pomelo.player = player;
 			msgTempate.uid = pomelo.uid;
 			msgTempate.playerId = pomelo.player.id;
 			msgTempate.from = pomelo.player.name,
 			msgTempate.areaId = pomelo.player.areaId;
-			robot.later(enterScene,Math.round()*10000);
+			robot.later(enterScene,Math.random()*10000);
     }
 };
 
@@ -288,10 +288,8 @@ var getFirstFight = function() {
 var moveEvent = function() {
 
   if (!!pomelo.isDead) {return;}
-
- var msg = {route: 'area.playerHandler.move', path:getPath()};
-      robot.request(msg);
-
+  var msg = {route: 'area.playerHandler.move', path:getPath()};
+  robot.request(msg);
 
 }
 
@@ -326,7 +324,6 @@ pomelo.lastAttAckId = 0;
 
 attack = function(entity) {
   if (!entity) {return;}
-  //console.log(pomelo.isDead + ' ' + pomelo.uid + ' ' + pomelo.playerId + ' ' + entity.entityId + ' ' + entity.type);
   if (entity.type === 'player' || entity.type === 'mob') {
     if (entity.died) {return;}
     var attackId = entity.entityId;
