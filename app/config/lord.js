@@ -12,12 +12,12 @@ pomelo.skills = [];
 
 //set debug level
 
-robot.logLevel(1);
+robot.logLevel(3);
 
 var msgTempate = {route:'chat.chatHandler.send',scope:'D41313',content:'老子要杀怪了'};
 
 var login = function(){
-  var data = {route:'connector.entryHandler.rlogin', id:Iuser.uid};
+  var data = {route:'connector.entryHandler.rlogin', id:robot.actor.uid};
   robot.request(data,loginRes,true);
 };
 
@@ -41,7 +41,7 @@ var loginRes = function(data){
 
 var enterScene = function() {
 	var msg = {route:"area.playerHandler.enterScene", uid:pomelo.uid, playerId: pomelo.player.id, areaId: pomelo.player.areaId};
-	robot.request(msg,enterSceneRes,false);
+	robot.request(msg,enterSceneRes,true);
 }
 
 login();
@@ -65,7 +65,7 @@ var enterSceneRes = function(data) {
 
 var sendChat = function() {
   msgTempate.content = '捡到一个XXOO的玩意';
-  robot.request(msgTempate);
+  robot.request(msgTempate,okRes,true);
 }
 
 /**
@@ -285,12 +285,14 @@ var getFirstFight = function() {
   return nearEntity;
 }
 
+var okRes = function(){
+}
+
 var moveEvent = function() {
 
   if (!!pomelo.isDead) {return;}
   var msg = {route: 'area.playerHandler.move', path:getPath()};
-  robot.request(msg);
-
+  robot.request(msg,okRes,true);
 }
 
 var fightedMap = {};
@@ -332,7 +334,7 @@ attack = function(entity) {
     var route = 'area.fightHandler.attack';
     var areaId = pomelo.player.areaId;
     var msg = {route:route,areaId:areaId,playerId: pomelo.player.id, targetId:attackId, skillId: skillId};
-    robot.request(msg);
+    robot.request(msg,okRes,true);
     //console.log(' begin attack == %j , %j ',entity.type,msg); 
   } else if (entity.type === 'npc') {
     //
@@ -341,7 +343,7 @@ attack = function(entity) {
     var attackId = entity.entityId;
     var msg = {route:route, areaId:pomelo.player.areaId, playerId:pomelo.player.id, targetId:attackId};
     //console.log(' begin pickup == %j , %j ',entity.type,msg); 
-    robot.request(msg);
+    robot.request(msg,okRes,true);
   }
 }
 
