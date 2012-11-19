@@ -53,7 +53,7 @@ var enterSceneRes = function(data) {
   pomelo.player = data.data.curPlayer;
   pomelo.entities[pomelo.player.entityId] = pomelo.player;
 	var moveRandom = Math.floor(Math.random()*3+1);
-  if (moveRandom<=0) {
+  if (moveRandom<=2) {
       robot.interval(moveEvent,2000+Math.round(Math.random()*3000));
       console.log(' mover:' + pomelo.player.name);
   } else { 
@@ -264,24 +264,30 @@ var getPath = function() {
   return path;
 }
 
-var getFirstFight = function() {
-  var nearstId = 0,nearEntity = null,count=0,size =  getEntityLength(pomelo.entities); 
+var getFightPlayer = function(type,size) {
+  var nearEntity = null,count=0; 
   var randomNum = Math.floor(Math.random()*size);
   for (var id in pomelo.entities){
     var entity = pomelo.entities[id];
-    if (entity.type==='npc' || entity.type==='player') {continue;}
     if (entity.entityId === pomelo.player.entityId) {continue;}
-    //if (entity.type==='mob' && entity.level>pomelo.level) {continue;}
+    if (entity.type !==type) {continue;}
     if (count>=randomNum) {
-      nearstId = id;
       nearEntity = entity ;
       break;
     } 
     count++;
   }
-  if (nearstId<=0) {return;}
-  pomelo.lastAttAckId = nearstId;
-  console.log(' first fight uid=%j type=%j attackId=%j' ,pomelo.uid ,nearEntity.type,nearstId);
+	return entities; 
+}
+
+var getFirstFight = function() {
+  var nearEntity = null,size =  getEntityLength(pomelo.entities); 
+  nearEntity = getFightPlayer('mob',size);
+	if (!nearEntity) { nearEntity = getFightPlayer('item',size)};
+	if (!nearEntity) { nearEntity = getFightPlayer('player',size)};
+	if (!nearEntity) {return};
+  pomelo.lastAttAckId = nearEntity.entityId;
+  console.log(' first fight uid=%j type=%j attackId=%j' ,pomelo.uid ,nearEntity.type,nearEntity.entityId);
   return nearEntity;
 }
 
@@ -289,7 +295,6 @@ var okRes = function(){
 }
 
 var moveEvent = function() {
-
   if (!!pomelo.isDead) {return;}
   var msg = {route: 'area.playerHandler.move', path:getPath()};
   robot.request(msg,okRes,true);
