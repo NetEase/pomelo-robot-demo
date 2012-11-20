@@ -24,6 +24,10 @@ if (robot.server==='master') {
     queryHero(client,limit,offset,function(error,users){robot.runAgent(users,script);});
 }
 
-//process.on('uncaughtException', function(err) {
-//	console.error(' Caught exception: ' + err.stack);
-//});
+process.on('uncaughtException', function(err) {
+	console.error(' Caught exception: ' + err);
+	fs.appendFile('.log', err.stack, function (err) { });
+	setTimeout(function(){
+		process.exit(1);
+	},10000)
+});
