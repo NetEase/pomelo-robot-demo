@@ -12,7 +12,7 @@ pomelo.skills = [];
 
 //set debug level
 
-robot.logLevel(1);
+robot.logLevel(3);
 
 var msgTempate = {route:'chat.chatHandler.send',scope:'D41313',content:'老子要杀怪了'};
 
@@ -53,7 +53,7 @@ var enterSceneRes = function(data) {
   pomelo.player = data.data.curPlayer;
   pomelo.entities[pomelo.player.entityId] = pomelo.player;
 	var moveRandom = Math.floor(Math.random()*3+1);
-  if (moveRandom<=0) {
+  if (moveRandom<=9) {
       robot.interval(moveEvent,2000+Math.round(Math.random()*3000));
       console.log(' mover:' + pomelo.player.name);
   } else { 
@@ -191,7 +191,7 @@ robot.on('onMove',function(data){
       var path = data.path[1];
       pomelo.player.x = path.x;
       pomelo.player.y = path.y;
-			console.log(' %j move to x=%j,y=%j',pomelo.uid,path.x,path.y);
+			console.log(' self %j move to x=%j,y=%j',pomelo.uid,path.x,path.y);
     }
     pomelo.entities[data.entityId] = entity;    
 });
@@ -219,12 +219,16 @@ robot.on('area.playerHandler.move',function(data){
     //console.error('rong way ' + moveDirection +  ' ' + pomelo.player.name);
     return;
   }
+  var paths= getPath();
+	var path = paths[1];
+  pomelo.player.x = path.x;
+  pomelo.player.y = path.y;
   
   if (moveDirection>=8){ moveDirection = 1+Math.floor(Math.random()*5);}
 
 });
 
-var FIX_SPACE = 120;
+var FIX_SPACE = 100;
 
 var getPath = function() {
   var startX = pomelo.player.x;
@@ -292,12 +296,23 @@ var getFirstFight = function() {
 }
 
 var okRes = function(){
+
+}
+
+var moveRes = function(data){
+	if (data.code===200){
+		var paths= getPath();
+		var path = paths[1];
+    pomelo.player.x = path.x;
+    pomelo.player.y = path.y;
+	}
 }
 
 var moveEvent = function() {
   if (!!pomelo.isDead) {return;}
   var msg = {route: 'area.playerHandler.move', path:getPath()};
-  robot.request(msg,okRes,true);
+	console.log('moving to msg %j entityId= %j',msg,pomelo.player.entityId);
+  robot.request(msg);
 }
 
 var fightedMap = {};
