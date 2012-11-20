@@ -12,7 +12,7 @@ pomelo.skills = [];
 
 //set debug level
 
-robot.logLevel(3);
+robot.logLevel(1);
 
 var msgTempate = {route:'chat.chatHandler.send',scope:'D41313',content:'老子要杀怪了'};
 
@@ -53,7 +53,7 @@ var enterSceneRes = function(data) {
   pomelo.player = data.data.curPlayer;
   pomelo.entities[pomelo.player.entityId] = pomelo.player;
 	var moveRandom = Math.floor(Math.random()*3+1);
-  if (moveRandom<=9) {
+  if (moveRandom<=2) {
       robot.interval(moveEvent,2000+Math.round(Math.random()*3000));
       console.log(' mover:' + pomelo.player.name);
   } else { 
