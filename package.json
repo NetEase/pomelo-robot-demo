@@ -4,6 +4,6 @@
   "private": false, 
   "dependencies": {
    "mysql": ">=0.9.5"
-   ,"pomelo-robot": ">=0.0.25"
+   ,"pomelo-robot": ">=0.0.27"
   }
 }
