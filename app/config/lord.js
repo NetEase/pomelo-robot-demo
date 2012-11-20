@@ -17,7 +17,7 @@ robot.logLevel(1);
 var msgTempate = {route:'chat.chatHandler.send',scope:'D41313',content:'老子要杀怪了'};
 
 var login = function(){
-  var data = {route:'connector.entryHandler.rlogin', id:robot.actor.uid};
+  var data = {route:'connector.entryHandler.entry', token:robot.actor};
   robot.request(data,loginRes,true);
 };
 

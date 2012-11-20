@@ -1,8 +1,18 @@
 var Client = require('mysql').Client;
 var dataApi = require('./dataApi');
-
+var Token = require('./token.js');
+var session = require('./json/session.json');
+/**
+	* session.json file format 
+	*
+	*{
+	*  "secret": "yourselfkey", 
+	*  "expire": -1
+  *}
+	*
+	*/
 queryHero = function(client,limit,offset,cb){
-    var users = [];
+    var tokens = [];
     var sql = "SELECT User.* FROM User,Player where User.id = Player.userId  and User.name like 'pomelo%' limit ? offset ? ";
     var args = [parseInt(limit),parseInt(offset)];
     client.query(sql,args,function selectCb(error, results, fields) {
@@ -11,10 +21,12 @@ queryHero = function(client,limit,offset,cb){
             cb(null,users);
         }
         for (var i = 0;i<results.length;i++) {
-      	    var user = {uid:results[i]['id'],username:results[i]['name'],passwd:results[i]['passwd']||'123'};
-    	      users.push(user);
+      	    var uid = results[i]['id'];
+						var token = Token.create(uid,Date.now(),session.secret);
+      	    //var user = {uid:results[i]['id'],username:results[i]['name'],passwd:results[i]['passwd']||'123'};
+    	      tokens.push(token);
         };
-        cb(null,users);
+        cb(null,tokens);
     });
 };
 
