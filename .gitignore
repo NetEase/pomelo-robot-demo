@@ -11,4 +11,3 @@ node_modules/*
 *.sublime-project
 *.sublime-workspace
 *.swp
-app/data/json/session.json
