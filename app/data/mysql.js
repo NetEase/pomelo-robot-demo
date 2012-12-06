@@ -44,9 +44,9 @@ genHero = function(client,prefix,max,cb){
                 var username = _username +  i;
                 var name = _name +  i;
                 var ids = [1001,1007,1020,1022,1024,1025,1026,1027,1028,1029,1030,1031]
-                var sql = 'insert into User (name,password,loginCount,lastLoginTime) values(?,?,?,?)';
+                var sql = 'insert into User (name,password,loginCount,from,lastLoginTime) values(?,?,?,?)';
 	              var loginTime = Date.now();
-	              var args = [username, password, 1, loginTime];
+	              var args = [username, password, 1, 'robot',loginTime];
 		            client.query(sql, args, function(err,res){
 			              if(err !== null){
                         console.error('create User error %j',err);

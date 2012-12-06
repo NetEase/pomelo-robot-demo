@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "private": false, 
   "dependencies": {
-   "mysql": ">=0.9.5"
+   "mysql": "==0.9.5"
    ,"pomelo-robot": ">=0.0.27"
   }
 }
