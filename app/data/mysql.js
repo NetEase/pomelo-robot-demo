@@ -12,7 +12,7 @@ var session = require('./json/session.json');
 	*
 	*/
 queryHero = function(client,limit,offset,cb){
-    var tokens = [];
+    var users = [];
     var sql = "SELECT User.* FROM User,Player where User.id = Player.userId  and User.name like 'pomelo%' limit ? offset ? ";
     var args = [parseInt(limit),parseInt(offset)];
     client.query(sql,args,function selectCb(error, results, fields) {
@@ -22,11 +22,11 @@ queryHero = function(client,limit,offset,cb){
         }
         for (var i = 0;i<results.length;i++) {
       	    var uid = results[i]['id'];
-						var token = Token.create(uid,Date.now(),session.secret);
-      	    //var user = {uid:results[i]['id'],username:results[i]['name'],passwd:results[i]['passwd']||'123'};
-    	      tokens.push(token);
+			var token = Token.create(uid,Date.now(),session.secret);
+      	    var user = {uid:results[i]['id'],token:token,username:results[i]['name'],passwd:results[i]['passwd']||'123'};
+    	   users.push(user);
         };
-        cb(null,tokens);
+        cb(null,users);
     });
 };
 

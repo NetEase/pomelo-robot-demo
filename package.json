@@ -1,9 +1,11 @@
 {
-  "name": "pomelo-robot-demo", 
-  "version": "0.0.2",
-  "private": false, 
-  "dependencies": {
-   "mysql": "==0.9.5"
-   ,"pomelo-robot": ">=0.0.27"
-  }
+    "name": "robot-client",
+    "version": "0.0.1",
+    "description": "A distributed load test framework",
+    "author": "<piaohai@gmail.com>",
+    "dependencies": {
+     "socket.io-client": ">=0.9.6"
+  	 ,"socket.io": ">=0.9.6"
+  	 , "underscore": ">=1.0.0"
+    }
 }

@@ -1,0 +1,6 @@
+{
+  "master":{"host": "127.0.0.1","port":8888,"webport":8889,"cwebport":8890,"interval":2000},
+  "apps":{"host":"127.0.0.1","port":3014},
+  "mysql":{"host":"pomelo.163.com","user":"xy","password":"dev","database":"Pomelo"}, 
+  "clients":["127.0.0.1"]
+}
