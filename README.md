@@ -14,7 +14,7 @@ pomelo-robot also can be used in http benchmark by developer script;
 ##Start
 ```
 npm install pomelo-robot
-node main
+node app master
 
 Then. please visited http://localhost:8889/
 
