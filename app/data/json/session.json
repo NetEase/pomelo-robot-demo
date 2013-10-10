@@ -1,4 +1,4 @@
 {
-	"secret": "git", 
+	"secret": "pomelo_session_secret", 
 	"expire": -1
 }
