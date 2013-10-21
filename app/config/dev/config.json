@@ -1,5 +1,3 @@
 {
-  "master":{"host": "127.0.0.1","port":8888,"webport":8889,"cwebport":8890,"interval":2000},
-  "apps":{"host":"114.113.202.154","port":3010},
-  "clients":["127.0.0.1"]
+  "master": {"host": "127.0.0.1", "port":8888, "webport":8889, "interval":500}
 }
