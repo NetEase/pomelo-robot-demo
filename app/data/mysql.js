@@ -38,7 +38,7 @@ genHero = function(client,prefix,max,cb){
             console.error('select maxId error %j',error);
         } else {
             var beginId = results[0].maxid;
-            var password = '123';
+            var password = 'pomelo';
             var sceneId = 1,level = 1 , x = 100,y = 100;var _username = prefix,_name=prefix;
             for (var i =  beginId ;i<(beginId+max);i++) {
                 var username = _username +  i;
