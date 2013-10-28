@@ -556,6 +556,7 @@ var afterLogin = function(pomelo,data){
       }
     }
 
+    /*
     var start = 0
       , end = 0;
     start = new Date().getTime();
@@ -571,8 +572,8 @@ var afterLogin = function(pomelo,data){
       console.log(tmpStr);
       process.exit(0);
     });
+    */
 
-    /*
     var actRandom = Math.floor(Math.random()*2 + 1);
     var intervalTime = Math.floor(Math.random()*3000 + 2000);
     if (actRandom === 1) {
@@ -588,7 +589,6 @@ var afterLogin = function(pomelo,data){
       console.log('2 ~ EnterSceneRes ~ areaId = %d, playerId = %d, fighter = %s, intervalTime = %d',
         pomelo.player.areaId, pomelo.player.id, pomelo.player.name, intervalTime);
     }
-    */
 
     /*
     setInterval(function() {

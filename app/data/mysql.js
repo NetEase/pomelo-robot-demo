@@ -23,7 +23,7 @@ queryHero = function(client,limit,offset,cb){
         for (var i = 0;i<results.length;i++) {
       	    var uid = results[i]['id'];
 			var token = Token.create(uid,Date.now(),session.secret);
-      	    var user = {uid:results[i]['id'],token:token,username:results[i]['name'],passwd:results[i]['passwd']||'123'};
+      	    var user = {uid:results[i]['id'],token:token,username:results[i]['name'],passwd:results[i]['passwd']||'pomelo'};
     	   users.push(user);
         };
         cb(null,users);
