@@ -446,7 +446,7 @@ queryHero(client, 1, 0, function(error, users){
 });
 
 function queryEntry(uid, callback) {
-  pomelo.init({host: '127.0.0.1', port: 3014, log: true}, function() {
+  pomelo.init({host: config.apps.host, port: config.apps.port, log: true}, function() {
     pomelo.request('gate.gateHandler.queryEntry', {uid: uid}, function(data) {
       console.log('QueryEntry is running ...');
       pomelo.disconnect();
