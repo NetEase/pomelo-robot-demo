@@ -385,7 +385,7 @@ pomelo.player = null;
 pomelo.uid = null;
 
 var client = mysql.createConnection({
-  host: '127.0.0.1',
+  host: 'pomelo3.server.163.org',
   user: 'xy',
   port: 3306,
   password: 'dev',
