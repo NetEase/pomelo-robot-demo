@@ -14,5 +14,6 @@
       , "pomelo-protocol": "0.1.0"
       , "ws": "0.4.25"
       , "mysql": "2.0.0-alpha8"
+      , "heapdump": "0.2.4"
 		}
 }
