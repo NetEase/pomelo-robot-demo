@@ -4,14 +4,13 @@ var Protocol = require('pomelo-protocol');
 var Package = Protocol.Package;
 var Message = Protocol.Message;
 var EventEmitter = require('events').EventEmitter;
-var protocol = require('pomelo-protocol');
 var protobuf = require('pomelo-protobuf');
 var cwd = process.cwd();
-var utils = require(cwd + '/app/script/utils');
 var moveStat = require(cwd + '/app/script/statistic').moveStat;
 var attackStat = require(cwd + '/app/script/statistic').attackStat;
 var areaStat = require(cwd + '/app/script/statistic').areaStat;
 var util = require('util');
+var utils = require(cwd + '/app/script/utils');
 
 if (typeof Object.create !== 'function') {
   Object.create = function (o) {
@@ -428,10 +427,7 @@ if (typeof actor !== 'undefined'){
   console.log(offset + ' ' + actor.id);
 }
 
-// temporary code
-// queryHero(client, 1, offset, function(error, users){
-queryHero(client, 1, 0, function(error, users){
-// temporary code
+queryHero(client, 1, offset, function(error, users){
   console.log('QueryHero ~ offset = ', offset);
   var user = users[0];
   client.end();
