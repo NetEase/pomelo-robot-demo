@@ -421,11 +421,7 @@ var monitor = function(type, name, reqId) {
 
 var connected = false;
 
-var offset = (typeof actor !== 'undefined') ? actor.id : 1;
-
-if (typeof actor !== 'undefined'){
-  console.log(offset + ' ' + actor.id);
-}
+var offset = (typeof actor !== 'undefined') ? actor.id : 0;
 
 queryHero(client, 1, offset, function(error, users){
   console.log('QueryHero ~ offset = ', offset);
