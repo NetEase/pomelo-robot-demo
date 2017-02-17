@@ -9,7 +9,7 @@ var mode = 'master';
 if (process.argv.length > 2){
     mode = process.argv[2];
 }
- 
+
 if (mode !== 'master' && mode !== 'client') {
 	throw new Error(' mode must be master or client');
 }
