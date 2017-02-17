@@ -37,6 +37,13 @@ queryHero = function (client, limit, offset, cb) {
     });
 };
 
+/**
+ *
+ * @param client
+ * @param prefix 昵称前缀
+ * @param max  创建机器人数量
+ * @param cb
+ */
 genHero = function (client, prefix, max, cb) {
     var sql = 'SELECT max(id) as maxid FROM User where 1 = ? ';
     var args = [1];
@@ -48,6 +55,7 @@ genHero = function (client, prefix, max, cb) {
             console.error('select maxId error %j', error);
         } else {
             var beginId = results[0].maxid;
+            console.log('maxid: ', beginId);
             var password = 'pomelo';
             // var sceneId = 1, level = 1, x = 100, y = 100;
             var _username = prefix, _name = prefix;
@@ -55,7 +63,7 @@ genHero = function (client, prefix, max, cb) {
                 var username = _username + i;
                 var name = _name + i;
                 var ids = [1001, 1007, 1020, 1022, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031]
-                var sql = 'insert into User (name,password,loginCount,from,lastLoginTime) values(?,?,?,?)';
+                var sql = 'insert into User (name,password,loginCount,from,lastLoginTime) values(?,?,?,?,?)';
                 var loginTime = Date.now();
                 var args = [username, password, 1, 'robot', loginTime];
                 client.query(sql, args, function (err, res) {
