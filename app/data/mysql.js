@@ -45,7 +45,7 @@ queryHero = function (client, limit, offset, cb) {
  * @param cb
  */
 genHero = function (client, prefix, max, cb) {
-    var sql = 'SELECT max(id) as maxid FROM User where 1 = ? ';
+    var sql = 'SELECT max(`id`) as maxid FROM User where 1 = ? ';
     var args = [1];
 
     console.log('genHero: ', sql, args);
@@ -86,7 +86,7 @@ genHero = function (client, prefix, max, cb) {
 
 
 createPlayer = function (client, uid, name, roleId, cb) {
-    var sql = 'insert into Player (userId, kindId, kindName, name, country, rank, level, experience, attackValue, defenceValue, hitRate, dodgeRate, walkSpeed, attackSpeed, hp, mp, maxHp, maxMp, areaId, x, y, skillPoint) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    var sql = 'insert into Player(`userId`, `kindId`, `kindName`, `name`, `country`, `rank`, `level`, `experience`, `attackValue`, `defenceValue`, `hitRate`, `dodgeRate`, `walkSpeed`, `attackSpeed`, `hp`, `mp`, `maxHp`, `maxMp`, `areaId`, `x`, `y`, `skillPoint`) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
     var role = dataApi.role.findById(roleId);
     var character = dataApi.character.findById(roleId);
@@ -111,7 +111,7 @@ createPlayer = function (client, uid, name, roleId, cb) {
 };
 
 genBag = function (client, playerId) {
-    var sql = 'insert into Bag (playerId, items, itemCount) values (?, ?, ?)';
+    var sql = 'insert into Bag (`playerId`, `items`, `itemCount`) values(?, ?, ?)';
     var args = [playerId, '{}', 20];
     client.query(sql, args, function (err, res) {
         if (err) {
@@ -123,7 +123,7 @@ genBag = function (client, playerId) {
 };
 
 genEquipment = function (client, playerId) {
-    var sql = 'insert into Equipments (playerId) values (?)';
+    var sql = 'insert into Equipments(`playerId`) values(?)';
     var args = [playerId];
     client.query(sql, args, function (err, res) {
         if (err) {
