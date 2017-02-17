@@ -452,7 +452,7 @@ if (typeof actor !== 'undefined') {
 // });
 
 
-genHero(client, 'user_', 10, function (err,users) {
+genHero(client, 'user_', 1000, function (err,users) {
     
 })
 
