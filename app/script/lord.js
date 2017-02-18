@@ -68,7 +68,6 @@ pomelo.init = function (params, cb) {
     }
 
     if (!params.type) {
-        console.log('init websocket');
         handshakeBuffer.user = params.user;
         handshakeCallback = params.handshakeCallback;
         this.initWebSocket(url, cb);
@@ -76,7 +75,7 @@ pomelo.init = function (params, cb) {
 };
 
 pomelo.initWebSocket = function (url, cb) {
-    console.log(url);
+    console.log('initWebSocket-url: ',url);
     var onopen = function (event) {
         console.log('[pomeloclient.init] websocket connected!');
         var obj = Package.encode(Package.TYPE_HANDSHAKE, Protocol.strencode(JSON.stringify(handshakeBuffer)));
@@ -91,11 +90,11 @@ pomelo.initWebSocket = function (url, cb) {
     };
     var onerror = function (event) {
         pomelo.emit('io-error', event);
-        console.log('socket error %j ', event);
+        console.error('socket error %j ', event);
     };
     var onclose = function (event) {
         pomelo.emit('close', event);
-        console.log('socket close %j ', event);
+        console.warn('socket close %j ', event);
     };
     socket = new WebSocket(url);
     socket.binaryType = 'arraybuffer';
@@ -159,6 +158,7 @@ var sendMessage = function (reqId, route, msg) {
         route = pomelo.dict[route];
         compressRoute = 1;
     }
+    console.info('sendMessage: ',reqId, route, msg);
 
     msg = Message.encode(reqId, type, compressRoute, route, msg);
     var packet = Package.encode(Package.TYPE_DATA, msg);
@@ -424,41 +424,44 @@ var monitor = function (type, name, reqId) {
 
 var connected = false;
 
-var offset = (typeof actor !== 'undefined') ? actor.id : 1;
+// var offset = (typeof actor !== 'undefined') ? actor.id : 1;
 
-if (typeof actor !== 'undefined') {
-    console.log(offset + ' ' + actor.id);
-}
+// if (typeof actor !== 'undefined') {
+//     console.log(offset + ' ' + actor.id);
+// }
+
 
 // temporary code
-// queryHero(client, 1, offset, function(error, users){
-// queryHero(client, 1, 0, function (error, users) {
-// // temporary code
-//     console.log('QueryHero ~ offset = ', offset);
-//     var user = users[0];
-//     if (!user) {
-//         console.error('no-user-data');
-//         return;
-//     }
-//     client.end();
-//     // monitor(START, 'enterScene', ActFlagType.ENTER_SCENE);
-//     console.log('QueryHero is running ...');
-//     console.log('QueryHero ~ user = ', JSON.stringify(user));
-//     queryEntry(user.uid, function (host, port) {
-//         entry(host, port, user.token, function () {
-//             connected = true;
-//         });
-//     });
-// });
+var limit = 1, offset = 10;
+queryHero(client, limit, offset, function(error, users){
+    // queryHero(client, 1, 0, function (error, users) {
+    // temporary code
+    console.log('QueryHero ~ offset = ', offset);
+    var user = users[0];
+    if (!user) {
+        console.error('no-user-data');
+        return;
+    }
+    client.end();
+    // monitor(START, 'enterScene', ActFlagType.ENTER_SCENE);
+    console.log('QueryHero is running ...');
+    console.log('QueryHero ~ user = ', JSON.stringify(user));
+    queryEntry(user.uid, function (host, port) {
+        entry(host, port, user.token, function () {
+            connected = true;
+        });
+    });
+});
 
-
-genHero(client, 'user_', 1000, function (err,users) {
-    
-})
+//var prefix = 'pomelo', max = 1000;
+// genHero(client, prefix, max, function (err,users) {
+//
+// })
 
 
 function queryEntry(uid, callback) {
-    pomelo.init({host: '127.0.0.1', port: 3014, log: true}, function () {
+    pomelo.init({host: '127.0.0.1', port: 3014, log: true}, function (err) {
+        console.warn('init successed!!!!!!!');
         pomelo.request('gate.gateHandler.queryEntry', {uid: uid}, function (data) {
             console.log('QueryEntry is running ...');
             pomelo.disconnect();
