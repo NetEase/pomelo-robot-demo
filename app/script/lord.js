@@ -11,6 +11,7 @@ var config = require(cwd + '/app/config/' + envConfig.env + '/config');
 var util = require('util');
 var mysql = require('mysql');
 var Pomelo = require("pomelo-node-tcp-client");
+
 var pomelo = new Pomelo();
 
 pomelo.player = null;
@@ -95,31 +96,25 @@ function simulateRealPlayer() {
             });
         }
     ],function (err) {
-
-    });
-}
-
-//创建机器人数据
-function createRobotPlayer() {
-    var prefix = 'pomelo', max = 1000;
-    genHero(client, prefix, max, function (err,users) {
-
     });
 }
 
 
 function queryEntry(user, callback) {
     var result = {};
+    var gatePort = 3014;
 
     async.waterfall([
         function (cb) {
-            pomelo.init('127.0.0.1', 3014, {}, function (res) {
-                console.warn('init successed!!!!!!!',res);
+            pomelo.init('127.0.0.1', gatePort, {}, function (res) {
+                console.warn('queryEntry init successed!!!!!!!',res);
                 cb();
             });
         },
         function (cb) {
             pomelo.request('gate.gateHandler.queryEntry', {uid: user.uid}, function (data) {
+                pomelo.disconnect();
+
                 if(!!data){
                     result = data;
                 }
@@ -127,28 +122,46 @@ function queryEntry(user, callback) {
                     console.log('Servers error!');
                     return;
                 }
+
                 cb();
             });
         }
     ],function () {
-        console.log('result: ', result);
-        pomelo.disconnect();
+        console.log('queryEntry-result: ', result);
         callback(result.host, result.port);
     });
 }
 
 function entry(host, port, token, callback) {
     var entryData;
+    // todo 新创建一个pomelo client ; or error
+    /*
+     socket_on_error:  { Error: connect EISCONN 127.0.0.1:3010 - Local (127.0.0.1:54514)
+     at Object.exports._errnoException (util.js:1022:11)
+     at exports._exceptionWithHostPort (util.js:1045:20)
+     at connect (net.js:881:16)
+     at net.js:970:9
+     at _combinedTickCallback (internal/process/next_tick.js:67:7)
+     at process._tickCallback (internal/process/next_tick.js:98:9)
+     code: 'EISCONN',
+     errno: 'EISCONN',
+     syscall: 'connect',
+     address: '127.0.0.1',
+     port: 3010 }
+     */
+    pomelo = new Pomelo();
 
     async.waterfall([
         function (cb) {
-            pomelo.init(host, port, {}, function () {
+            pomelo.init(host, port, {}, function (res) {
+                // console.warn('entry init successed!!!!!!!',res);
                 monitor(START, 'entry', ActFlagType.ENTRY);
                 cb();
             });
         },
         function (cb) {
             pomelo.request('connector.entryHandler.entry', {token: token}, function (data) {
+                console.log('entry-result: ', data);
                 monitor(END, 'entry', ActFlagType.ENTRY);
                 if (callback) {
                     callback(data.code);
@@ -652,6 +665,14 @@ function afterLogin(pomelo, data) {
     }
 
 };
+
+//创建机器人数据
+function createRobotPlayer() {
+    var prefix = 'pomelo', max = 1000;
+    genHero(client, prefix, max, function (err,users) {
+
+    });
+}
 
 simulateRealPlayer();
 // createRobotPlayer()
