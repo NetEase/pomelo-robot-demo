@@ -265,7 +265,7 @@ function afterLogin(pomelo, data) {
          console.log('\n\n' + 'start = ', start);
          // create instance testing
          var cnt = 10;
-         pomelo.request("area.playerHandler.createInstance", {cnt: cnt}, function(args) {
+         pomelo.request("area.playerHandler.createInstance", {cnt: cnt}, function(err,args) {
          end = new Date().getTime();
          console.log('end = ', end);
          console.log('CreateInstance ~ args = ', JSON.stringify(args));
@@ -460,7 +460,7 @@ function afterLogin(pomelo, data) {
         var msg = {path: paths};
         monitor('incr', 'moveReq');
         monitor(START, 'move', ActFlagType.MOVE);
-        pomelo.request('area.playerHandler.move', msg, function (data) {
+        pomelo.request('area.playerHandler.move', msg, function (err,data) {
             monitor(END, 'move', ActFlagType.MOVE);
             if (data.code !== RES_OK) {
                 console.error('wrong path! %s %j : %d~%s, in area %d',
@@ -525,7 +525,7 @@ function afterLogin(pomelo, data) {
             monitor('incr', 'attackReq');
             monitor(START, 'attack', ActFlagType.ATTACK);
             // pomelo.notify(route, msg);
-            pomelo.request(route, msg, function () {
+            pomelo.request(route, msg, function (err,data) {
                 monitor(END, 'attack', ActFlagType.ATTACK);
                 console.log('\nTotal attacker num = %j', attackStat.total);
             });
@@ -554,7 +554,7 @@ function afterLogin(pomelo, data) {
             // var msg = { areaId:pomelo.player.areaId, playerId:pomelo.player.id, targetId:attackId};
             var msg = {areaId: pomelo.player.areaId, playerId: pomelo.player.id, targetId: attackId};
             monitor(START, 'pickItem', ActFlagType.PICK_ITEM);
-            pomelo.request(route, msg, function () {
+            pomelo.request(route, msg, function (err,data) {
                 monitor(END, 'pickItem', ActFlagType.PICK_ITEM);
             });
         }
