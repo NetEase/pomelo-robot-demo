@@ -11,7 +11,7 @@ var config = require(cwd + '/app/config/' + envConfig.env + '/config');
 var util = require('util');
 var mysql = require('mysql');
 var Pomelo = require("pomelo-nodejsclient-websocket");
-
+var RES_OK = 200;
 var pomelo = new Pomelo();
 
 pomelo.player = null;
