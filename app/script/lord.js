@@ -10,7 +10,7 @@ var config = require(cwd + '/app/config/' + envConfig.env + '/config');
 
 var util = require('util');
 var mysql = require('mysql');
-var Pomelo = require("pomelo-node-tcp-client");
+var Pomelo = require("pomelo-nodejsclient-websocket");
 
 var pomelo = new Pomelo();
 
@@ -106,13 +106,14 @@ function queryEntry(user, callback) {
 
     async.waterfall([
         function (cb) {
-            pomelo.init('127.0.0.1', gatePort, {}, function (res) {
-                console.warn('queryEntry init successed!!!!!!!',res);
+            pomelo.init({host: '127.0.0.1', port: gatePort}, function (err,res) {
+                console.warn('queryEntry init successed!!!!!!!',err,res);
                 cb();
             });
         },
         function (cb) {
-            pomelo.request('gate.gateHandler.queryEntry', {uid: user.uid}, function (data) {
+            pomelo.request('gate.gateHandler.queryEntry', {uid: user.uid}, function (err, data) {
+                console.log('queryEntry-result: ',err,data);
                 pomelo.disconnect();
 
                 if(!!data){
@@ -153,15 +154,15 @@ function entry(host, port, token, callback) {
 
     async.waterfall([
         function (cb) {
-            pomelo.init(host, port, {}, function (res) {
-                // console.warn('entry init successed!!!!!!!',res);
+            pomelo.init({host: host, port: port}, function (err) {
+                console.warn('entry init error:',err);
                 monitor(START, 'entry', ActFlagType.ENTRY);
                 cb();
             });
         },
         function (cb) {
-            pomelo.request('connector.entryHandler.entry', {token: token}, function (data) {
-                console.log('entry-result: ', data);
+            pomelo.request('connector.entryHandler.entry', {token: token}, function (err,data) {
+                console.log('entry-result: ', err,data);
                 monitor(END, 'entry', ActFlagType.ENTRY);
                 if (callback) {
                     callback(data.code);
@@ -240,7 +241,7 @@ function afterLogin(pomelo, data) {
         console.log('1 ~ EnterScene ~ areaId = %d, playerId = %d, name = %s', pomelo.player.areaId, pomelo.player.id, pomelo.player.name);
     }
 
-    var enterSceneCallback = function (data) {
+    var enterSceneCallback = function (err,data) {
         console.log('enterScene-result: ', data);
         monitor(END, 'enterScene', ActFlagType.ENTER_SCENE);
         pomelo.player = data.curPlayer;
@@ -447,7 +448,7 @@ function afterLogin(pomelo, data) {
         return entity;
     }
 
-    var okRes = function () {
+    var okRes = function (err,data) {
 
     }
 
