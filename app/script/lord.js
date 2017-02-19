@@ -675,5 +675,7 @@ function createRobotPlayer() {
     });
 }
 
-simulateRealPlayer();
+// 第一次使用 要生成机器人数据
 // createRobotPlayer()
+
+simulateRealPlayer();
