@@ -14,9 +14,9 @@ var session = require('./json/session.json');
 queryHero = function (client, limit, offset, cb) {
     var users = [];
 
-    var sql = "SELECT User.* FROM User,Player where User.id = Player.userId  and User.name like 'user_%' limit ? offset ? ";
+    var sql = "SELECT User.* FROM User,Player where User.id = Player.userId  and User.name like 'pomelo%' limit ? offset ? ";
     var args = [parseInt(limit), parseInt(offset)];
-    client.query(sql, args, function selectCb(error, results, fields) {
+    client.query(sql, args, function selectCb(error, results) {
         if (!!error) {
             console.log('queryHero Error: ' + error.message);
             cb(null, users);

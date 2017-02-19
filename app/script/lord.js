@@ -12,10 +12,9 @@ var util = require('util');
 var mysql = require('mysql');
 var Pomelo = require("pomelo-nodejsclient-websocket");
 var RES_OK = 200;
-var pomelo = new Pomelo();
 
-pomelo.player = null;
-pomelo.uid = null;
+// pomelo.player = null;
+// pomelo.uid = null;
 
 var client = mysql.createConnection({
     "host": "127.0.0.1",
@@ -63,39 +62,36 @@ var connected = false;
 var async = require('async');
 
 function simulateRealPlayer() {
-    var limit = 1, offset = 10;
+    var limit = 1000, offset = 10;
 
-    var user, host, port;
+    var players = [];
 
     async.waterfall([
         function (cb) {
             queryHero(client, limit, offset, function(error, users){
-                user = users[0];
-                if (!user) {
+                console.log('users.length: ',users.length);
+                if (!users || !users.length) {
                     console.error('no-user-data');
                     return;
                 }
+                players = users;
                 client.end();
                 monitor(START, 'enterScene', ActFlagType.ENTER_SCENE);
                 cb(error);
             });
         },
         function (cb) {
-            console.log('QueryHero ~ user = ', JSON.stringify(user));
-            queryEntry(user, function (clienthost, clientport) {
-                host = clienthost;
-                port = clientport;
-                cb();
-            });
-        },
-        function (cb) {
-            console.log('Start entry~~~~~host: ',host, ' port: ', port, ' token: ', user.token);
-            entry(host, port, user.token, function () {
-                connected = true;
+            async.mapSeries(players, function (user,call) {
+                console.log('QueryHero ~ user = ', JSON.stringify(user));
+                queryEntry(user, function () {
+                    call();
+                });
+            }, function () {
                 cb();
             });
         }
     ],function (err) {
+
     });
 }
 
@@ -103,11 +99,12 @@ function simulateRealPlayer() {
 function queryEntry(user, callback) {
     var result = {};
     var gatePort = 3014;
+    var pomelo = new Pomelo();
 
     async.waterfall([
         function (cb) {
-            pomelo.init({host: '127.0.0.1', port: gatePort}, function (err,res) {
-                cb();
+            pomelo.init({host: '127.0.0.1', port: gatePort}, function (err) {
+                cb(err);
             });
         },
         function (cb) {
@@ -124,10 +121,15 @@ function queryEntry(user, callback) {
 
                 cb();
             });
+        },
+        function (cb) {
+            console.log('Start entry~~~~~host: ',result.host, ' port: ', result.port, ' token: ', user.token);
+            entry(result.host, result.port, user.token, function (err,code) {
+                cb(err);
+            })
         }
     ],function () {
-        // console.log('queryEntry-result: ', result);
-        callback(result.host, result.port);
+        callback();
     });
 }
 
@@ -148,8 +150,9 @@ function entry(host, port, token, callback) {
      address: '127.0.0.1',
      port: 3010 }
      */
-    pomelo = new Pomelo();
+    var pomelo = new Pomelo();
 
+    var code ;
     async.waterfall([
         function (cb) {
             pomelo.init({host: host, port: port}, function (err) {
@@ -160,11 +163,11 @@ function entry(host, port, token, callback) {
         },
         function (cb) {
             pomelo.request('connector.entryHandler.entry', {token: token}, function (err,data) {
-                // console.log('entry-result: ', err,data);
                 monitor(END, 'entry', ActFlagType.ENTRY);
-                if (callback) {
-                    callback(data.code);
-                }
+                code = data.code;
+                // if (callback) {
+                //     callback(data.code);
+                // }
 
                 if (data.code == 1001) {
                     console.log('Login fail!');
@@ -188,6 +191,7 @@ function entry(host, port, token, callback) {
         }
     ],function (err) {
         // pomelo.disconnect();
+        callback(err,code);
     });
 }
 
@@ -672,6 +676,6 @@ function createRobotPlayer() {
 }
 
 // 第一次使用 要生成机器人数据
-// createRobotPlayer()
+// createRobotPlayer();
 
 simulateRealPlayer();
