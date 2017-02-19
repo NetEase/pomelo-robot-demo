@@ -107,13 +107,11 @@ function queryEntry(user, callback) {
     async.waterfall([
         function (cb) {
             pomelo.init({host: '127.0.0.1', port: gatePort}, function (err,res) {
-                console.warn('queryEntry init successed!!!!!!!',err,res);
                 cb();
             });
         },
         function (cb) {
             pomelo.request('gate.gateHandler.queryEntry', {uid: user.uid}, function (err, data) {
-                console.log('queryEntry-result: ',err,data);
                 pomelo.disconnect();
 
                 if(!!data){
@@ -128,7 +126,7 @@ function queryEntry(user, callback) {
             });
         }
     ],function () {
-        console.log('queryEntry-result: ', result);
+        // console.log('queryEntry-result: ', result);
         callback(result.host, result.port);
     });
 }
@@ -155,14 +153,14 @@ function entry(host, port, token, callback) {
     async.waterfall([
         function (cb) {
             pomelo.init({host: host, port: port}, function (err) {
-                console.warn('entry init error:',err);
+                // console.warn('entry init error:',err);
                 monitor(START, 'entry', ActFlagType.ENTRY);
                 cb();
             });
         },
         function (cb) {
             pomelo.request('connector.entryHandler.entry', {token: token}, function (err,data) {
-                console.log('entry-result: ', err,data);
+                // console.log('entry-result: ', err,data);
                 monitor(END, 'entry', ActFlagType.ENTRY);
                 if (callback) {
                     callback(data.code);
@@ -194,7 +192,6 @@ function entry(host, port, token, callback) {
 }
 
 function afterLogin(pomelo, data) {
-    console.log('afterLogin: ', data);
     pomelo.player = null;
     pomelo.players = {};
     pomelo.entities = {};
@@ -242,7 +239,6 @@ function afterLogin(pomelo, data) {
     }
 
     var enterSceneCallback = function (err,data) {
-        console.log('enterScene-result: ', data);
         monitor(END, 'enterScene', ActFlagType.ENTER_SCENE);
         pomelo.player = data.curPlayer;
         pomelo.addEntity(pomelo.player);
