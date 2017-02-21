@@ -16,3 +16,4 @@ times
 log/
 npm-debug.log
 *.sublime-*
+.idea/*
